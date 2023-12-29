@@ -1,16 +1,19 @@
-// let number1;
-// let operator;
-// let number2;
-
+const calScript = document.querySelector("#calScript");
 const digits = document.querySelectorAll(".digit");
 const operators = document.querySelectorAll(".operator");
 const calcDisplay = document.querySelector(".display");
 const calcClear = document.querySelector(".clear");
+const equalSign = document.querySelector("#equals");
 let calcDisplayValue = "";
 
-// console.log(digits);
-// console.log(operators);
-console.dir(calcDisplay);
+
+equalSign.addEventListener("click", () => {
+  operate(calcDisplayValue);
+});
+
+calScript.addEventListener("load", () => {
+  calcDisplay.setAttribute("value", "0");
+});
 
 digits.forEach((item) => {
   item.addEventListener("click", () => {
@@ -21,7 +24,7 @@ digits.forEach((item) => {
 
 operators.forEach((item) => {
   item.addEventListener("click", () => {
-    console.log(calcDisplay, calcDisplay.textContent)
+    console.log(calcDisplay, calcDisplay.textContent);
     if (
       calcDisplayValue.includes("+") ||
       calcDisplayValue.includes("-") ||
@@ -29,11 +32,11 @@ operators.forEach((item) => {
       calcDisplayValue.includes("*")
     ) {
       console.log("Yes Included");
-      adjustingAttributes(item)
+      adjustingAttributes(item);
     } else {
       calcDisplay.textContent += item.value;
       calcDisplayValue = calcDisplay.textContent;
-      item.setAttribute('disabled', '')
+      item.setAttribute("disabled", "");
     }
   });
 });
@@ -41,14 +44,50 @@ operators.forEach((item) => {
 calcClear.addEventListener("click", () => {
   calcDisplay.textContent = "";
   calcDisplayValue = "";
+  operators.forEach((item) => item.removeAttribute("disabled"));
 });
+
+function operate(displayValue) {
+  if (!displayValue) return;
+  const slicingIdx = displayValue
+    .split("")
+    .findIndex((op) => op === "+" || op === "-" || op === "/" || op === "*");
+  if (slicingIdx !== -1) {
+    let firstNumber = displayValue.slice(0, slicingIdx);
+    let operator = displayValue.slice(slicingIdx, slicingIdx + 1);
+    let secondNumber = displayValue.slice(slicingIdx + 1);
+    if (secondNumber) {
+      switch (operator) {
+        case "+":
+          calcDisplay.textContent = add(firstNumber, secondNumber);
+          break;
+        case "-":
+          calcDisplay.textContent = subtract(firstNumber, secondNumber);
+          break;
+        case "/":
+          calcDisplay.textContent = divide(firstNumber, secondNumber);
+          break;
+        case "*":
+          calcDisplay.textContent = multiply(firstNumber, secondNumber);
+          break;
+        default:
+          return;
+      }
+    } else return;
+  } else {
+    return;
+  }
+}
 
 function adjustingAttributes(button) {
   operators.forEach((item) => {
-    console.log(button,'button')
+    console.log(button, "button");
     if (item === button) {
       item.setAttribute("disabled", "");
-      calcDisplay.textContent =  calcDisplayValue.replace(/\*|\/|\+|\-/, button.value);
+      calcDisplay.textContent = calcDisplayValue.replace(
+        /\*|\/|\+|\-/,
+        button.value
+      );
     } else {
       item.removeAttribute("disabled");
     }
