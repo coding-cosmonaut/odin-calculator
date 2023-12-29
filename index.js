@@ -6,6 +6,9 @@ const calcClear = document.querySelector(".clear");
 const equalSign = document.querySelector("#equals");
 let calcDisplayValue = "";
 
+
+//BLAHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
+
 equalSign.addEventListener("click", () => {
   operate(calcDisplayValue);
 });
