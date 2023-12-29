@@ -1,31 +1,59 @@
-let number1;
-let operator;
-let number2;
+// let number1;
+// let operator;
+// let number2;
 
-const digits = document.querySelectorAll('.digit');
-const calcDisplay = document.querySelector('.display');
-const calcClear = document.querySelector('.clear');
+const digits = document.querySelectorAll(".digit");
+const operators = document.querySelectorAll(".operator");
+const calcDisplay = document.querySelector(".display");
+const calcClear = document.querySelector(".clear");
+let calcDisplayValue = "";
 
-
-
-console.log(digits)
-console.dir(calcDisplay)
+// console.log(digits);
+// console.log(operators);
+console.dir(calcDisplay);
 
 digits.forEach((item) => {
-  console.log(item)
-  item.addEventListener('click', (() => {
-    console.log(item.value)
-    console.log(calcDisplay.textContent)
-    calcDisplay.textContent += item.value
-  }))
-})
+  item.addEventListener("click", () => {
+    calcDisplay.textContent += item.value;
+    calcDisplayValue = calcDisplay.textContent;
+  });
+});
 
-calcClear.addEventListener('click', (() => {
-  calcDisplay.textContent = '';
-}))
+operators.forEach((item) => {
+  item.addEventListener("click", () => {
+    console.log(calcDisplay, calcDisplay.textContent)
+    if (
+      calcDisplayValue.includes("+") ||
+      calcDisplayValue.includes("-") ||
+      calcDisplayValue.includes("/") ||
+      calcDisplayValue.includes("*")
+    ) {
+      console.log("Yes Included");
+      adjustingAttributes(item)
+    } else {
+      calcDisplay.textContent += item.value;
+      calcDisplayValue = calcDisplay.textContent;
+      item.setAttribute('disabled', '')
+    }
+  });
+});
 
+calcClear.addEventListener("click", () => {
+  calcDisplay.textContent = "";
+  calcDisplayValue = "";
+});
 
-
+function adjustingAttributes(button) {
+  operators.forEach((item) => {
+    console.log(button,'button')
+    if (item === button) {
+      item.setAttribute("disabled", "");
+      calcDisplay.textContent =  calcDisplayValue.replace(/\*|\/|\+|\-/, button.value);
+    } else {
+      item.removeAttribute("disabled");
+    }
+  });
+}
 
 function add(num, num2) {
   return Number(num) + Number(num2);
