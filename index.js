@@ -6,13 +6,18 @@ const calcClear = document.querySelector(".clear");
 const equalSign = document.querySelector("#equals");
 let calcDisplayValue = "";
 
-
 equalSign.addEventListener("click", () => {
   operate(calcDisplayValue);
 });
 
 calScript.addEventListener("load", () => {
   calcDisplay.setAttribute("value", "0");
+});
+
+calcClear.addEventListener("click", () => {
+  calcDisplay.textContent = "";
+  calcDisplayValue = "";
+  operators.forEach((item) => item.removeAttribute("disabled"));
 });
 
 digits.forEach((item) => {
@@ -23,15 +28,14 @@ digits.forEach((item) => {
 });
 
 operators.forEach((item) => {
+  console.log(item)
   item.addEventListener("click", () => {
-    console.log(calcDisplay, calcDisplay.textContent);
     if (
       calcDisplayValue.includes("+") ||
       calcDisplayValue.includes("-") ||
       calcDisplayValue.includes("/") ||
       calcDisplayValue.includes("*")
     ) {
-      console.log("Yes Included");
       adjustingAttributes(item);
     } else {
       calcDisplay.textContent += item.value;
@@ -41,47 +45,9 @@ operators.forEach((item) => {
   });
 });
 
-calcClear.addEventListener("click", () => {
-  calcDisplay.textContent = "";
-  calcDisplayValue = "";
-  operators.forEach((item) => item.removeAttribute("disabled"));
-});
-
-function operate(displayValue) {
-  if (!displayValue) return;
-  const slicingIdx = displayValue
-    .split("")
-    .findIndex((op) => op === "+" || op === "-" || op === "/" || op === "*");
-  if (slicingIdx !== -1) {
-    let firstNumber = displayValue.slice(0, slicingIdx);
-    let operator = displayValue.slice(slicingIdx, slicingIdx + 1);
-    let secondNumber = displayValue.slice(slicingIdx + 1);
-    if (secondNumber) {
-      switch (operator) {
-        case "+":
-          calcDisplay.textContent = add(firstNumber, secondNumber);
-          break;
-        case "-":
-          calcDisplay.textContent = subtract(firstNumber, secondNumber);
-          break;
-        case "/":
-          calcDisplay.textContent = divide(firstNumber, secondNumber);
-          break;
-        case "*":
-          calcDisplay.textContent = multiply(firstNumber, secondNumber);
-          break;
-        default:
-          return;
-      }
-    } else return;
-  } else {
-    return;
-  }
-}
 
 function adjustingAttributes(button) {
   operators.forEach((item) => {
-    console.log(button, "button");
     if (item === button) {
       item.setAttribute("disabled", "");
       calcDisplay.textContent = calcDisplayValue.replace(
@@ -93,6 +59,46 @@ function adjustingAttributes(button) {
     }
   });
 }
+
+
+function operate(displayValue) {
+  if (!displayValue) return;
+  operators.forEach((item) => item.removeAttribute("disabled"));
+  const slicingIdx = displayValue
+    .split("")
+    .findIndex((op) => op === "+" || op === "-" || op === "/" || op === "*");
+  if (slicingIdx !== -1) {
+    let firstNumber = displayValue.slice(0, slicingIdx);
+    let operator = displayValue.slice(slicingIdx, slicingIdx + 1);
+    let secondNumber = displayValue.slice(slicingIdx + 1);
+    if (secondNumber) {
+
+      switch (operator) {
+        case "+":
+          calcDisplay.textContent = add(firstNumber, secondNumber);
+          calcDisplayValue = calcDisplay.textContent;
+          break;
+        case "-":
+          calcDisplay.textContent = subtract(firstNumber, secondNumber);
+          calcDisplayValue = calcDisplay.textContent;
+          break;
+        case "/":
+          calcDisplay.textContent = divide(firstNumber, secondNumber);
+          calcDisplayValue = calcDisplay.textContent;
+          break;
+        case "*":
+          calcDisplay.textContent = multiply(firstNumber, secondNumber);
+          calcDisplayValue = calcDisplay.textContent;
+          break;
+        default:
+          return;
+      }
+    } else return;
+  } else {
+    return;
+  }
+}
+
 
 function add(num, num2) {
   return Number(num) + Number(num2);
