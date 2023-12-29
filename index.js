@@ -1,13 +1,11 @@
 const calScript = document.querySelector("#calScript");
 const digits = document.querySelectorAll(".digit");
 const operators = document.querySelectorAll(".operator");
-const calcDisplay = document.querySelector(".display");
+const calcDisplay = document.querySelector(".display").textContent;
 const calcClear = document.querySelector(".clear");
 const equalSign = document.querySelector("#equals");
-let calcDisplayValue = "";
+//let calcDisplayValue = "";
 
-
-//BLAHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
 
 equalSign.addEventListener("click", () => {
   operate(calcDisplayValue);
@@ -25,8 +23,10 @@ calcClear.addEventListener("click", () => {
 
 digits.forEach((item) => {
   item.addEventListener("click", () => {
-    calcDisplay.textContent += item.value;
-    calcDisplayValue = calcDisplay.textContent;
+    console.log(item)
+    console.log(calcDisplay)
+    calcDisplay = calcDisplay + item.value;
+    console.log(calcDisplay)
   });
 });
 
