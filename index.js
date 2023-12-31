@@ -5,11 +5,27 @@ const calcDisplay = document.querySelector(".display");
 const calcClear = document.querySelector(".clear");
 const equalSign = document.querySelector("#equals");
 const dot = document.querySelector(".period");
+const deleteBttn = document.querySelector('.delete')
 let numOfPeriods=[];
+
 
 equalSign.addEventListener("click", () => {
   operate(calcDisplay.textContent);
 });
+
+deleteBttn.addEventListener('click', (() => {
+  console.log(deleteBttn)
+  console.log(calcDisplay.textContent)
+  console.log(calcDisplay.textContent.length)
+
+  if (calcDisplay.textContent === '0' && calcDisplay.textContent.length === 1) {
+    return;
+  } else {
+    let slicedNDiced = calcDisplay.textContent.slice(0,-1) 
+    console.log(slicedNDiced)
+    calcDisplay.textContent = slicedNDiced;
+  }
+}))
 
 dot.addEventListener("click", () => {
   if (calcDisplay.textContent.includes('.')) {
@@ -44,9 +60,6 @@ calcClear.addEventListener("click", () => {
 
 digits.forEach((item) => {
   item.addEventListener("click", () => {
-    // console.log(calcDisplay.textContent.includes("0"))
-    // console.log(!checkForOperators(calcDisplay))
-    // console.log(calcDisplay.textContent.length <=  1)
     if (
       calcDisplay.textContent.includes("0") &&
       !checkForOperators(calcDisplay) &&
