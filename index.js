@@ -5,45 +5,38 @@ const calcDisplay = document.querySelector(".display");
 const calcClear = document.querySelector(".clear");
 const equalSign = document.querySelector("#equals");
 const dot = document.querySelector(".period");
-const deleteBttn = document.querySelector('.delete')
-let numOfPeriods=[];
-
+const deleteBttn = document.querySelector(".delete");
+let numOfPeriods = [];
 
 equalSign.addEventListener("click", () => {
   operate(calcDisplay.textContent);
 });
 
-deleteBttn.addEventListener('click', (() => {
-  console.log(deleteBttn)
-  console.log(calcDisplay.textContent)
-  console.log(calcDisplay.textContent.length)
-
-  if (calcDisplay.textContent === '0' && calcDisplay.textContent.length === 1) {
+deleteBttn.addEventListener("click", () => {
+  if (calcDisplay.textContent === "0" && calcDisplay.textContent.length === 1) {
     return;
   } else {
-    let slicedNDiced = calcDisplay.textContent.slice(0,-1) 
-    console.log(slicedNDiced)
+    let slicedNDiced = calcDisplay.textContent.slice(0, -1);
     calcDisplay.textContent = slicedNDiced;
   }
-}))
+});
 
 dot.addEventListener("click", () => {
-  if (calcDisplay.textContent.includes('.')) {
-    console.log('in first')
+  if (calcDisplay.textContent.includes(".")) {
     if (checkForOperators(calcDisplay)) {
       if (numOfPeriods.length >= 1) {
         return;
       }
-      numOfPeriods = calcDisplay.textContent.match(/\./g)
+      numOfPeriods = calcDisplay.textContent.match(/\./g);
       calcDisplay.textContent += dot.value;
     }
-  } else if (!calcDisplay.textContent.includes('.') && checkForOperators(calcDisplay)) {
-    console.log('else if')
-    numOfPeriods.push('.')
+  } else if (
+    !calcDisplay.textContent.includes(".") &&
+    checkForOperators(calcDisplay)
+  ) {
+    numOfPeriods.push(".");
     calcDisplay.textContent += dot.value;
-  }
-  else {
-    console.log('else state')
+  } else {
     calcDisplay.textContent += dot.value;
   }
 });
@@ -54,8 +47,7 @@ calScript.addEventListener("load", () => {
 
 calcClear.addEventListener("click", () => {
   calcDisplay.textContent = 0;
-  //operators.forEach((item) => item.removeAttribute("disabled"));
-  numOfPeriods =[]
+  numOfPeriods = [];
 });
 
 digits.forEach((item) => {
@@ -95,7 +87,9 @@ function round(num) {
 function checkForSecondDigit(string) {
   let operatorIdx = string
     .split("")
-    .findIndex((op) => op === "+" || op === "-" || op === "/" || op === "*");
+    .findLastIndex(
+      (op) => op === "+" || op === "-" || op === "/" || op === "*"
+    );
   let secondNum = string.slice(operatorIdx + 1);
   if (operatorIdx !== -1 && secondNum !== "") {
     return true;
@@ -117,33 +111,46 @@ function checkForOperators(string) {
   }
 }
 
+function checkForNegative(string) {
+  let newString = string.indexOf("-", 0);
+  if (newString !== -1) {
+    return true;
+  } else false;
+}
+
 function adjustingAttributes(button) {
   operators.forEach((item) => {
     if (item === button) {
-      //item.setAttribute("disabled", "");
-      let replacedString = calcDisplay.textContent.replace(
-        /\*|\/|\+|\-/,
-        button.value
-      );
-      calcDisplay.textContent = replacedString;
-    } else {
-      //item.removeAttribute("disabled");
+      if (checkForNegative(calcDisplay.textContent)) {
+        let oldString = calcDisplay.textContent.slice(0, -1);
+        let newString = calcDisplay.textContent
+          .slice(-1)
+          .replace(/\*|\/|\+|\-/, button.value);
+        calcDisplay.textContent = oldString + newString;
+      } else {
+        let replacedString = calcDisplay.textContent.replace(
+          /\*|\/|\+|\-/,
+          button.value
+        );
+        calcDisplay.textContent = replacedString;
+      }
     }
   });
 }
 
 function operate(displayValue, secondOperator) {
   if (!displayValue) return;
-  operators.forEach((item) => item.removeAttribute("disabled"));
   const slicingIdx = displayValue
     .split("")
-    .findIndex((op) => op === "+" || op === "-" || op === "/" || op === "*");
+    .findLastIndex(
+      (op) => op === "+" || op === "-" || op === "/" || op === "*"
+    );
   if (slicingIdx !== -1) {
     let firstNumber = displayValue.slice(0, slicingIdx);
     let operator = displayValue.slice(slicingIdx, slicingIdx + 1);
     let secondNumber = displayValue.slice(slicingIdx + 1);
-    if (secondNumber && secondNumber !== '.') {
-      numOfPeriods=[]
+    if (secondNumber && secondNumber !== ".") {
+      numOfPeriods = [];
       let result;
       switch (operator) {
         case "+":
