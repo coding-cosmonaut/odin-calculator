@@ -88,6 +88,10 @@ operators.forEach((item) => {
   });
 });
 
+function round(num) {
+  return Math.round(num * 1000) / 1000;
+}
+
 function checkForSecondDigit(string) {
   let operatorIdx = string
     .split("")
@@ -143,25 +147,25 @@ function operate(displayValue, secondOperator) {
       let result;
       switch (operator) {
         case "+":
-          result = add(firstNumber, secondNumber).toString();
+          result = round(add(firstNumber, secondNumber)).toString();
           calcDisplay.textContent = secondOperator
             ? result.padEnd(result.length + 1, secondOperator)
             : result;
           break;
         case "-":
-          result = subtract(firstNumber, secondNumber).toString();
+          result = round(subtract(firstNumber, secondNumber)).toString();
           calcDisplay.textContent = secondOperator
             ? result.padEnd(result.length + 1, secondOperator)
             : result;
           break;
         case "/":
-          result = divide(firstNumber, secondNumber);
+          result = round(divide(firstNumber, secondNumber)).toString();
           calcDisplay.textContent = secondOperator
             ? result.toString().padEnd(result.length + 1, secondOperator)
             : result;
           break;
         case "*":
-          result = multiply(firstNumber, secondNumber).toString();
+          result = round(multiply(firstNumber, secondNumber)).toString();
           calcDisplay.textContent = secondOperator
             ? result.padEnd(result.length + 1, secondOperator)
             : result;
