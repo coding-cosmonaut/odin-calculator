@@ -199,8 +199,8 @@ function multiply(num, num2) {
 }
 
 function divide(num, num2) {
-  let num2Iterate = num2.split("").findIndex((item) => item === "0" || item === '.');
-  if (num2 === "0" || num2[num2Iterate] !== '0' || num2[num2Iterate] !== '.') {
+  let num2Iterate = num2.split("").every(item => item === '0' || item === '.');
+  if (num2Iterate) {
     alert("Can't divide by zero!");
     return "0";
   } else {
